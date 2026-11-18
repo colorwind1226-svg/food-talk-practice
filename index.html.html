@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Food Talk 個人複習</title>
+<style>
+:root{--bg:#fff6e5;--card:#fff;--ink:#2b2118;--muted:#7a6a5a;--cream:#fff9d9;--pink:#fbe3ea;--yel:#ffc933;--red:#e4472f;--grn:#2f9e57;--blu:#2f6fe4;--sh:#2b2118}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#1f1812;--card:#2c231b;--ink:#fff3e0;--muted:#c3b09b;--cream:#4a4222;--pink:#4a2a35;--sh:#000}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Nunito","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.5;
+ padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:clamp(1.6rem,6vw,2.2rem);margin:6px 0 2px}
+.sub{color:var(--muted);margin:0 0 14px}
+:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
+.btn,.opt,.tile,.card{font:inherit;color:var(--ink);cursor:pointer;border:3px solid var(--ink);border-radius:14px;background:var(--card)}
+.btn{padding:10px 18px;background:var(--yel);color:#2b2118;font-weight:800;box-shadow:3px 3px 0 var(--sh)}
+.btn.alt{background:var(--card);color:var(--ink)}
+.btn.sm{padding:4px 10px;box-shadow:none}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--sh)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.c{justify-content:center}
+.cards{display:grid;gap:12px}
+.card{display:flex;align-items:center;gap:12px;padding:14px;text-align:left;box-shadow:4px 4px 0 var(--sh)}
+.card .ic{font-size:2rem}.card b{display:block;font-size:1.1rem}.card small{color:var(--muted)}.card .st{margin-left:auto;font-size:1.3rem}
+.card.first{background:var(--yel);color:#2b2118}.card.first small{color:#4a3b2a}
+.top{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:12px}
+.bar{flex:1;height:14px;border:3px solid var(--ink);border-radius:9px;background:var(--card);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--grn);transition:width .3s}
+.scene{display:flex;align-items:center;justify-content:center;gap:12px;min-height:100px;font-size:3rem;background:var(--cream);border:3px dashed var(--ink);border-radius:16px}
+.scene .food{font-size:3.4rem}
+.bub{font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:800;text-align:center;margin:12px 0}
+.txt{text-align:center;font-weight:700;min-height:1.5em;margin:4px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts{display:grid;gap:10px}
+.opt{padding:12px 14px;font-size:1.1rem;font-weight:700;text-align:left}
+.opt.big{font-size:2.6rem;text-align:center;padding:8px}
+.opt.ok{background:var(--grn);color:#fff;border-color:var(--grn)}
+.opt.no{background:var(--red);color:#fff;border-color:var(--red)}
+.line,.bank{display:flex;flex-wrap:wrap;gap:8px;min-height:62px;padding:10px;border-radius:14px}
+.line{border:3px dashed var(--ink);background:var(--cream)}
+.line.ok{border:3px solid var(--grn)}.line.no{border:3px solid var(--red)}
+.bank{justify-content:center;margin-top:10px}
+.tile{padding:8px 14px;font-size:1.15rem;font-weight:800;background:var(--yel);color:#2b2118;box-shadow:2px 2px 0 var(--sh)}
+.tile.p{background:var(--card);color:var(--ink)}
+.fb{min-height:3em;text-align:center;font-weight:800;margin-top:12px}
+input.in{font:inherit;font-weight:800;font-size:1.2rem;width:9em;max-width:100%;text-align:center;padding:4px 8px;border:3px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink)}
+.detail{margin-top:14px;text-align:center;padding:14px;border:3px solid var(--ink);border-radius:16px;background:var(--cream)}
+.detail .big{font-size:4rem}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--pink);font-weight:700}
+.tab{padding:10px;text-align:center;font-weight:800;background:var(--pink);border:3px solid var(--ink);border-radius:14px;margin-bottom:12px}
+.end{text-align:center}.end .stars{font-size:2.6rem}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const FOODS=[{e:"🍕",w:"pizza"},{e:"🍚",w:"rice"},{e:"🍲",w:"soup"},{e:"🥩",w:"steak"},{e:"🥟",w:"dumplings"},{e:"🍜",w:"noodles"},{e:"🥪",w:"sandwiches"},{e:"🍟",w:"French fries"},{e:"🍔",w:"hamburgers"},{e:"🌭",w:"hot dogs"},{e:"🍎",w:"apples"},{e:"🍌",w:"bananas"},{e:"🍈",w:"guavas"},{e:"🍇",w:"grapes"}];
+const WRONG={hamburgers:"hamburger","hot dogs":"hot dog",apples:"apple",bananas:"banana",guavas:"guava",sandwiches:"sandwich",dumplings:"dumpling",noodles:"noodle","French fries":"French fry",grapes:"grape",pizza:"pizzas",rice:"rices",soup:"soups",steak:"steaks"};
+const NOS=["pizza","rice","soup","steak"];
+const PEOPLE=[{q:"you",a:"I’d",icon:"🧒",z:"我"},{q:"they",a:"They’d",icon:"👫",z:"他們"},{q:"he",a:"He’d",icon:"👦",z:"他"},{q:"she",a:"She’d",icon:"👧",z:"她"}];
+const app=document.getElementById("app"),$=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const S=(p,f)=>`${p.a} like some ${f.w}, please.`;
+const QS=p=>`What would ${p.q} like to eat?`;
+const TTS="speechSynthesis" in window;
+function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+const scene=(p,x)=>`<div class="scene"><span>${p.icon}</span><span aria-hidden="true">💭</span><span class="food">${x}</span></div>`;
+const best={};
+
+/* ---- question types: r(spec, box, finish(ok)) ---- */
+function rListen({p,f},box,fin){
+  const o=shuffle([f,...shuffle(FOODS.filter(x=>x!==f)).slice(0,3)]);
+  box.innerHTML=`${scene(p,"❓")}<div class="bub">聽一聽，${p.z}想吃什麼？</div>
+  <div class="row c"><button class="btn" id="pl">🔊 再聽一次</button><button class="btn alt" id="sh">看文字提示</button></div>
+  <p class="txt" id="tx"></p><div class="grid">${o.map((x,i)=>`<button class="opt big" data-i="${i}">${x.e}</button>`).join("")}</div>`;
+  const line=`${QS(p)} ${S(p,f)}`,tx=$("#tx");
+  const show=()=>tx.textContent=line;
+  if(!TTS){show();$("#pl").hidden=true}
+  $("#pl").onclick=()=>say(line);$("#sh").onclick=show;
+  setTimeout(()=>say(line),300);
+  box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const ok=o[b.dataset.i]===f;
+    box.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(o[x.dataset.i]===f)x.classList.add("ok")});
+    if(!ok)b.classList.add("no");show();fin(ok)});
+}
+function rChoose({p,f},box,fin){
+  const right=S(p,f);
+  const d=[S(pick(PEOPLE.filter(x=>x!==p)),f),`${p.a} like some ${WRONG[f.w]}, please.`,S(p,pick(FOODS.filter(x=>x!==f))),`${p.a} like ${f.w}, please.`];
+  const o=shuffle([right,...shuffle([...new Set(d)].filter(x=>x!==right)).slice(0,3)]);
+  box.innerHTML=`${scene(p,f.e)}<div class="bub">${QS(p)}</div><div class="opts">${o.map(x=>`<button class="opt">${x}</button>`).join("")}</div>`;
+  box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    box.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.textContent===right)x.classList.add("ok")});
+    const ok=b.textContent===right;if(!ok)b.classList.add("no");fin(ok)});
+}
+function rOrder({p,f},box,fin){
+  const t=S(p,f),n=t.split(" ").length;
+  let bank=shuffle(t.split(" ").map((w,i)=>({w,i})));
+  while(bank.map(x=>x.w).join(" ")===t)bank=shuffle(bank);
+  let put=[],lock=false,st="";
+  const draw=()=>{
+    box.innerHTML=`${scene(p,f.e)}<div class="bub">${QS(p)}<br><small>把答句排出來</small></div>
+    <div class="line ${st}">${put.map(x=>`<button class="tile p" data-u="${x.i}">${x.w}</button>`).join("")}</div>
+    <div class="bank">${bank.map(x=>`<button class="tile" data-p="${x.i}">${x.w}</button>`).join("")}</div>
+    <div class="row c" ${lock?"hidden":""}><button class="btn" id="ck">檢查</button><button class="btn alt" id="rs">重排</button></div>`;
+    if(lock)return;
+    box.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{put.push(bank.splice(bank.findIndex(x=>x.i==b.dataset.p),1)[0]);draw()});
+    box.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{bank.push(put.splice(put.findIndex(x=>x.i==b.dataset.u),1)[0]);draw()});
+    $("#rs").onclick=()=>{bank=shuffle([...bank,...put]);put=[];draw()};
+    $("#ck").onclick=()=>{
+      if(put.length<n){$("#ck").textContent="還沒排完喔";return}
+      const ok=put.map(x=>x.w).join(" ")===t;lock=true;st=ok?"ok":"no";draw();fin(ok)};
+  };
+  draw();
+}
+function rSpell({p,f},box,fin){
+  box.innerHTML=`${scene(p,f.e)}<div class="bub">${QS(p)}</div>
+  <div class="bub">${p.a} like some <input class="in" id="in" autocomplete="off" autocapitalize="none" spellcheck="false">, please.</div>
+  <p class="txt" id="hn"></p><div class="row c"><button class="btn alt" id="hb">提示</button><button class="btn" id="ck">檢查</button></div>`;
+  const inp=$("#in");inp.focus();
+  $("#hb").onclick=()=>$("#hn").textContent=f.w.replace(/[^ ]/g,(c,i)=>i===0?c:"_");
+  const go=()=>{
+    const ok=inp.value.trim().replace(/\s+/g," ").toLowerCase()===f.w.toLowerCase();
+    inp.disabled=true;$("#ck").hidden=true;$("#hb").hidden=true;
+    $("#hn").textContent=f.w;inp.style.borderColor=ok?"var(--grn)":"var(--red)";fin(ok)};
+  $("#ck").onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};
+}
+const MODES={
+  listen:{n:"聽力選圖",i:"👂",d:"聽句子，選出想吃的食物",r:rListen},
+  choose:{n:"句型選擇",i:"✅",d:"選出正確的句子",r:rChoose},
+  order:{n:"句子重組",i:"🧩",d:"把單字排成答句",r:rOrder},
+  spell:{n:"拼寫填空",i:"✏️",d:"看圖寫出食物單字",r:rSpell},
+  mix:{n:"綜合挑戰",i:"🏆",d:"四種題型隨機出現"}
+};
+
+/* ---- practice engine: wrong answers come back until you get them right ---- */
+let M,Q,total,done,miss;
+function start(k){
+  M=k;total=8;done=0;miss=[];
+  Q=shuffle(FOODS).slice(0,total).map(f=>({f,p:pick(PEOPLE),m:k==="mix"?pick(["listen","choose","order","spell"]):k}));
+  next();
+}
+function next(){
+  if(!Q.length)return end();
+  const s=Q.shift();
+  app.innerHTML=`<div class="top"><button class="btn alt sm" id="hm">← 首頁</button><div class="bar"><i style="width:${done/total*100}%"></i></div><span>${done}/${total}</span></div>
+  <div id="box"></div><div class="fb" id="fb" aria-live="polite"></div><div class="row c"><button class="btn" id="nx" hidden>繼續</button></div>`;
+  $("#hm").onclick=home;
+  MODES[s.m].r(s,$("#box"),ok=>{
+    const ans=S(s.p,s.f);
+    if(ok)done++;else{if(!s.retry)miss.push(s.f);Q.push({...s,p:pick(PEOPLE),retry:true})}
+    $("#fb").innerHTML=ok?"🎉 答對了！":`正確答案：<b>${ans}</b><br><small>這題等一下會再出現</small>`;
+    if(s.m!=="listen")say(ans);
+    const nx=$("#nx");nx.hidden=false;nx.textContent=Q.length?"繼續":"看成績";nx.onclick=next;nx.focus();
+    $(".top span").textContent=`${done}/${total}`;$(".bar i").style.width=done/total*100+"%";
+  });
+}
+function end(){
+  const right=total-miss.length,st=right>=8?"🏆🏆🏆":right>=6?"⭐⭐":right>=4?"⭐":"💪";
+  best[M]=Math.max(best[M]||0,right);
+  app.innerHTML=`<div class="end"><div class="stars">${st}</div><h2>一次答對 ${right} / ${total} 題</h2>
+  <p>${miss.length?"需要再加強的單字：":"全部一次答對，太棒了！"}</p>
+  <p style="font-size:1.4rem;font-weight:800">${miss.map(f=>f.e+" "+f.w).join("　")}</p>
+  <div class="row c"><button class="btn" id="ag">再練一次</button><button class="btn alt" id="hm">回首頁</button></div></div>`;
+  $("#ag").onclick=()=>start(M);$("#hm").onclick=home;
+}
+
+/* ---- word cards ---- */
+function learn(){
+  app.innerHTML=`<div class="top"><button class="btn alt sm" id="hm">← 首頁</button><b>單字卡：點一點，聽發音</b></div>
+  <div class="tab">What would you / they / he / she like to eat?<br>I’d / We’d / They’d / He’d / She’d like some ＿＿, please.</div>
+  <div class="grid">${FOODS.map((f,i)=>`<button class="opt" data-i="${i}">${f.e} ${f.w}</button>`).join("")}</div>
+  <div class="detail" id="dt">點一個單字看看</div>`;
+  $("#hm").onclick=home;
+  app.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{
+    const f=FOODS[b.dataset.i],line=`I’d like some ${f.w}, please.`;
+    $("#dt").innerHTML=`<div class="big">${f.e}</div><b style="font-size:1.4rem">some ${f.w}</b><br>
+    <span class="tag">${NOS.includes(f.w)?"不加 s，直接說":"本身是複數，不用再改"}</span>
+    <p style="font-weight:700">${line}</p><button class="btn" id="sp">🔊 聽句子</button>`;
+    $("#sp").onclick=()=>say(line);say(line);
+  });
+}
+
+/* ---- home ---- */
+function home(){
+  app.innerHTML=`<h1>🍽️ Food Talk</h1><p class="sub">What would you like to eat? 自己練習，答錯的題目會再出現。</p>
+  <div class="cards"><button class="card first" id="lr"><span class="ic">🃏</span><span><b>先看單字卡</b><small>14 個食物單字與句型</small></span></button>
+  ${Object.entries(MODES).map(([k,m])=>`<button class="card" data-m="${k}"><span class="ic">${m.i}</span><span><b>${m.n}</b><small>${m.d}</small></span><span class="st">${best[k]>=8?"🏆":best[k]>=6?"⭐⭐":best[k]>=4?"⭐":""}</span></button>`).join("")}</div>
+  <p class="sub" style="margin-top:16px">不需要登入，成績只留在這個頁面，重新整理會重新開始。</p>`;
+  $("#lr").onclick=learn;
+  app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>start(b.dataset.m));
+}
+home();
+</script>
+</body>
+</html>
